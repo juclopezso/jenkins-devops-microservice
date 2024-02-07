@@ -13,18 +13,26 @@
 
 // Declarative Pipeline
 pipeline {
-	// agent any
+	agent any
 	// docker image as an agent
-	agent {
-		docker {
-			image 'maven:3.6.3'
-		}
+	// agent {
+	// 	docker {
+	// 		image 'maven:3.6.3'
+	// 	}
+	// }
+
+	// docker and maven set up in Jenkins UI
+	environment {
+		dockerHome = tool 'my-docker'
+		mavenHome = tool 'my-maven'
+		PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
 	}
 
 	stages {
 		stage('Build') {
 			steps {
-				// sh "mvn --version"
+				sh "mvn --version"
+				sh "docker version"
 				echo "Build"
 				echo "PATH - $PATH"
 				echo "BUILD_NUMBER - $env.BUILD_NUMBER"
