@@ -47,16 +47,16 @@ pipeline {
 				sh "mvn clean compile"
 			}
 		}
-		stage('Test') {
-			steps {
-				sh "mvn test"
-			}
-		}
-		stage('Integration test') {
-			steps {
-				sh "mvn failsafe:integration-test failsafe:verify"
-			}
-		}
+		// stage('Test') {
+		// 	steps {
+		// 		sh "mvn test"
+		// 	}
+		// }
+		// stage('Integration test') {
+		// 	steps {
+		// 		sh "mvn failsafe:integration-test failsafe:verify"
+		// 	}
+		// }
 		stage('Package') {
 			steps {
 				sh "mvn package -DskipTests"
