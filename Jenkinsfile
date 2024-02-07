@@ -57,6 +57,30 @@ pipeline {
 				sh "mvn failsafe:integration-test failsafe:verify"
 			}
 		}
+		stage('Package') {
+			steps {
+				sh "mvn package -DskipTests"
+			}
+		}
+		stage('Build Docker image') {
+			steps {
+				// docker build -t juclopezso/currency-exchange-devops:$env.BUILD_TAG
+				script {
+					dockerImage = docker.build("juclopezso/currency-exchange-devops:${env.BUILD_TAG}")
+				}
+			}
+		}
+		stage('Push Docker image') {
+			steps {
+				script {
+					// uses credentials saved in UI
+					docker.withRegistry('', 'dockerhub') {
+						dockerImage.push();
+						dockerImage.push('latest');
+					}
+				}
+			}
+		}
 	} 
 
 	// executes after the stages ran. Helps to clean ups
