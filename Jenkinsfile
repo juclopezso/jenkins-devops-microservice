@@ -13,10 +13,18 @@
 
 // Declarative Pipeline
 pipeline {
-	agent any
+	// agent any
+	// docker image as an agent
+	agent {
+		docker {
+			image 'maven:3.6.3'
+		}
+	}
+
 	stages {
 		stage('Build') {
 			steps {
+				sh "mvn --version"
 				echo "Build"
 			}
 		}
@@ -31,6 +39,8 @@ pipeline {
 			}
 		}
 	} 
+
+	// executes after the stages ran. Helps to clean ups
 	post {
 		always {
 			echo "I run always"
@@ -41,6 +51,7 @@ pipeline {
 		failure {
 			echo "I run when fails"
 		}
+		// changed: executed when the status of a build changes. i.e. from success to failure
 	}
 }
 
